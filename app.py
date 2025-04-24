@@ -77,13 +77,19 @@ if selected == 'Sobre':
 
     ### Modelos Disponíveis:
     - **Markowitz**:
-      - Usa o modelo clássico de média-variância para minimizar o risco (volatilidade) para um retorno alvo definido pelo usuário.
-      - Otimiza os pesos dos ativos usando o método SLSQP, sujeito a restrições (soma dos pesos = 1, pesos entre 0 e 1).
-      - Requer a especificação de um retorno alvo mensal.
+    - Usa o modelo clássico de média-variância para minimizar o risco (volatilidade) para um retorno alvo definido pelo usuário.
+    - Otimiza os pesos dos ativos usando o método SLSQP, sujeito a restrições (soma dos pesos = 1, pesos entre 0 e 1).
+    - Requer a especificação de um retorno alvo mensal.
     - **Hierarchical Risk Parity (HRP)**:
-      - Aloca pesos com base em clustering hierárquico da matriz de correlação dos ativos, distribuindo o risco de forma mais equilibrada.
-      - Não requer um retorno alvo, tornando-o mais robusto a estimativas imprecisas de retornos.
-      - Usa a biblioteca `riskfolio-lib` para implementação eficiente.
+    - Aloca pesos com base em clustering hierárquico da matriz de correlação dos ativos, distribuindo o risco de forma mais equilibrada.
+    - Não requer um retorno alvo, tornando-o mais robusto a estimativas imprecisas de retornos.
+    - Usa a biblioteca `riskfolio-lib` para implementação eficiente.
+
+    ### Como Funciona a Seleção de Índices:
+    A aplicação utiliza os **indicadores do World Governance Indicators (WGI)** para gerar uma **análise de regressão múltipla** para cada índice de mercado global. Com base nos coeficientes da regressão, a aplicação filtra os índices a serem utilizados na construção da carteira. Ou seja, índices que atendem aos critérios definidos pelos indicadores de governança (como **Controle da Corrupção**, **Estabilidade Política**, **Eficácia do Governo**, etc.) são selecionados para a otimização da carteira.
+
+    - **WGI (World Governance Indicators)**: Os indicadores incluem fatores como **Controle da Corrupção**, **Estabilidade Política**, **Eficácia do Governo**, **Qualidade Regulatória**, **Estado de Direito**, e **Voz e Responsabilidade**.
+    - A análise de **regressão múltipla** é aplicada para entender como cada índice de mercado está relacionado com os indicadores de governança, e os coeficientes da regressão são **normalizados entre -100 e 100** para garantir uma escala comum entre os diferentes índices. Esses coeficientes normalizados são então usados para **filtrar** os índices de acordo com o valor mínimo do indicador escolhido pelo usuário.
 
     ### Funcionalidades:
     - **Download de dados**: Obtém preços históricos de índices como IBOV, S&P 500, FTSE 100, entre outros, via `yfinance`.
@@ -91,10 +97,10 @@ if selected == 'Sobre':
     - **Filtro por indicadores de governança**: Filtra índices com base em indicadores como Controle da Corrupção, Estabilidade Política, Eficácia do Governo, entre outros (valores simulados).
     - **Otimização da carteira**: Permite escolher entre Markowitz (com retorno alvo) ou HRP (alocação baseada em risco).
     - **Interface interativa**: Interface amigável no Streamlit, onde o usuário pode:
-      - Definir o período de análise (data de início e fim).
-      - Escolher o modelo de otimização (Markowitz ou HRP).
-      - Para Markowitz, especificar o retorno alvo mensal.
-      - Selecionar um indicador de governança e seu valor mínimo.
+    - Definir o período de análise (data de início e fim).
+    - Escolher o modelo de otimização (Markowitz ou HRP).
+    - Para Markowitz, especificar o retorno alvo mensal.
+    - Selecionar um indicador de governança e seu valor mínimo.
     - **Resultados**: Exibe os índices selecionados e suas alocações em uma tabela, além do risco mensal, risco anualizado e retorno estimado.
 
     ### Como usar:
